@@ -14,6 +14,10 @@ const styles = StyleSheet.create({
         letterSpacing: 4,
         marginBottom:30,
     },
+    text: {
+        fontSize:20,
+        marginLeft:3,
+    }
 
 })
 

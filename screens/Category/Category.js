@@ -1,15 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   View, 
   FlatList, 
   Text, 
   Image, 
   TouchableHighlight } from 'react-native';
-import { categories } from '../../database/data';
+import axios from 'axios';
 import { getNumberOfRecipes } from '../../database/dataAPI';
 import styles from './styles';
 
 const CategoryScreen = (props) => {
+  const [categories, setCategories] = useState([]);
+
+  // run after the first render
+  useEffect(() => {
+    axios
+    .get('http://172.19.202.190:3001/categories/')
+    .then(response => {
+      console.log('Yeet categories are fetched!')
+      setCategories(response.data)
+    })
+  }, [])
+
     const onPressCategory = (item) => {
       const categoryId = item.id;
       props.navigation.navigate('CategoryRecipe', {categoryId});

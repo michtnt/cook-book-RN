@@ -1,34 +1,53 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
    View,
    FlatList, 
    Text, 
    Image, 
    TouchableHighlight } from 'react-native';
+import axios from 'axios';
+import { ScrollView } from 'react-native-gesture-handler';
 import { SearchBar } from 'react-native-elements';
-import { recipeCard } from '../../styles/recipeCard';
-import { recipes } from '../../database/data';
 import { getCategoryName } from '../../database/dataAPI';
 import styles from './styles';
-import { ScrollView } from 'react-native-gesture-handler';
 
 const RecipeList = (props) => {
+  const [recipes, setRecipes] = useState([]);
+
+  useEffect(() => {
+    axios
+    .get('http://172.19.202.190:3001/recipes/')
+    .then(response => {
+      console.log('Yeet recipes are fetched!')
+      setRecipes(response.data)
+    })
+  }, [])
 
     const onPressRecipe = (item) => {
+      const dataId = item.id
       const recipeId = item.recipeId
       const recipePhoto = item.photo_url
       const recipeTitle = item.title
       const recipePreptime = item.prepTime
       const recipeCooktime = item.cookTime
       const recipeServingsize = item.servingSize
+      const recipeIngredients = item.ingredients
+      const recipeDirections = item.directions
+      const recipeNotes = item.notes
+      const recipeRatings = item.ratings
 
       props.navigation.navigate('Recipe', {
+        dataId,
         recipeTitle, 
         recipeId,
         recipePhoto,
         recipePreptime, 
         recipeCooktime, 
-        recipeServingsize});
+        recipeServingsize,
+        recipeIngredients,
+        recipeDirections,
+        recipeNotes,
+        recipeRatings});
     }
 
     return(
