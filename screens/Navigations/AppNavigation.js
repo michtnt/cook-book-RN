@@ -1,4 +1,5 @@
 import React from 'react';
+import { Share } from 'react-native';
 import {createAppContainer} from 'react-navigation';
 import {createDrawerNavigator} from 'react-navigation-drawer';
 import {createStackNavigator} from 'react-navigation-stack';
@@ -12,6 +13,13 @@ import AddRecipe from '../AddRecipe/AddRecipe';
 import Recipe from '../Recipe/Recipe';
 import EditRecipe from '../EditRecipe/EditRecipe';
 import About from '../About/About';
+
+const shareOptions = {
+  title: 'Title',
+  message: 'I got a recipe to share!', // Note that according to the documentation at least one of "message" or "url" fields is required
+  url: 'www.example.com',
+  subject: 'Subject'
+};
 
 const MainNavigator = createStackNavigator({
   Category: {
@@ -51,7 +59,7 @@ const MainNavigator = createStackNavigator({
     screen: Recipe,
     navigationOptions: ({navigation}) => ({
     headerRight: (
-      <IOSIcon name="ios-share" size={35} style={{marginStart:10, marginRight: 20}} backgroundColor="#000000" onPress={() => console.log("share")}/>),
+      <IOSIcon name="ios-share" size={35} style={{marginStart:10, marginRight: 20}} backgroundColor="#000000" onPress={() => Share.share(shareOptions)}/>),
   }),
 },
 EditRecipe: {

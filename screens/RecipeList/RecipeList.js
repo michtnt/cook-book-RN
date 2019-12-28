@@ -5,10 +5,12 @@ import {
    Text, 
    Image, 
    TouchableHighlight } from 'react-native';
+import { SearchBar } from 'react-native-elements';
 import { recipeCard } from '../../styles/recipeCard';
 import { recipes } from '../../database/data';
 import { getCategoryName } from '../../database/dataAPI';
 import styles from './styles';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const RecipeList = (props) => {
 
@@ -31,6 +33,30 @@ const RecipeList = (props) => {
 
     return(
         <View>
+          <ScrollView>
+            <SearchBar
+          containerStyle={{
+            backgroundColor: 'transparent',
+            borderBottomColor: 'transparent',
+            borderTopColor: 'transparent',
+            flex: 1,
+          }}
+          inputContainerStyle={{
+            backgroundColor: '#EDEDED'
+          }}
+          inputStyle={{
+            backgroundColor: '#EDEDED',
+            borderRadius: 10,
+            color: 'black'
+          }}
+          searchIcond
+          clearIcon
+          //lightTheme
+          round
+          onChangeText={text => handleSearch(text)}
+          onClear={() => handleSearch('')}
+          placeholder="Search"
+        />
             <FlatList 
               vertical
               showsVerticalScrollIndicator={false}
@@ -49,6 +75,7 @@ const RecipeList = (props) => {
             }}
             keyExtractor={item => `${item.recipeId}`}
             />
+            </ScrollView>
         </View>
     )
 }
