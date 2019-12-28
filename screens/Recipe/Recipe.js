@@ -3,12 +3,27 @@ import {
    View,
    ScrollView, 
    Text, 
-   Image } from 'react-native';
+   Image,
+   Share } from 'react-native';
+import IOSIcon from "react-native-vector-icons/Ionicons";
 import IngredientButton from '../../components/IngredientButton/IngredientButton'
 import styles from './styles';
 
 const Recipe = (props) => {
-    console.log(props.navigation.getParam('recipePhoto'))
+
+    const shareOptions = {
+        title: 'Title',
+        message: `${props.navigation.getParam('recipeTitle')}`, // Note that according to the documentation at least one of "message" or "url" fields is required
+        url: `${props.navigation.getParam('recipePhoto')}`,
+        subject: 'Subject'
+      };
+      
+     Recipe.navigationOptions = ({navigation}) => ({
+        headerRight: (
+          <IOSIcon name="ios-share" size={35} style={{marginStart:10, marginRight: 20}} backgroundColor="#000000" onPress={() => Share.share(shareOptions)}/>
+          ),
+      })
+
     return(
         <View style={styles.main}>
             <ScrollView> 
