@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
         height: 400,
         justifyContent: "flex-start",
         fontSize: 20
-      }
+      },
 })
 
 export default styles;

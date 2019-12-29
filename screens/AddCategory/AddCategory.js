@@ -15,7 +15,7 @@ const AddCategory = (props) => {
            name: newCategory
         }
         axios
-        .post('http://172.19.202.190:3001/categories/add', categoryObject)
+        .post('http://10.1.1.128:3001/categories/add', categoryObject)
         .then(res => {
           console.log("New Category successfully added!");
           setNewCategory('');

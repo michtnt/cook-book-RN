@@ -1,11 +1,30 @@
 const recipeRouter = require('express').Router()
 const Recipe = require('../models/recipeModel');
+const Category = require('../models/categoryModel');
 
-  recipeRouter.post('/add', (request, response, next) => {
+recipeRouter.get('/:id/category', async (req, res, next) => {
+  try{
+  const recipe = await Recipe.findById(req.params.id).populate('categoryId', {name: 1})
+  console.log(recipe);
+  if(recipe){
+    res.json(recipe.name);
+  } else{
+    res.status(404).end();
+  }
+ } catch(exception) {
+    next(exception);
+  }
+})
+
+  recipeRouter.post('/add', async (request, response, next) => {
     const body = request.body
 
+    const category = await Category.findById(body.categoryId)
+
+    console.log(category.name)
     const recipe = new Recipe({
         title: body.title,
+        categoryId: category._id,
         servingSize: body.servingSize,
         prepTime: body.prepTime,
         cookTime: body.cookTime,
@@ -15,16 +34,14 @@ const Recipe = require('../models/recipeModel');
         ratings: body.ratings,
     })
 
-    recipe
-    .save()
-    .then((result) => {
-        return response.json(result);
+    const savedRecipe = await recipe.save()
+    category.recipes = await category.recipes.concat(savedRecipe._id)
+    await category.save()
+    response.json(savedRecipe.toJSON())
     })
-    .catch((error) => {next(error)})
-  })
 
   recipeRouter.get('/', (req, res, next) => {
-    Recipe.find({})
+     Recipe.find({}).populate('categoryId', {name: 1})
     .then((result) => {
       res.json(result);
     })

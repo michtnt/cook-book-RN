@@ -8,7 +8,6 @@ import {
 import axios from 'axios';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SearchBar } from 'react-native-elements';
-import { getCategoryName } from '../../database/dataAPI';
 import styles from './styles';
 
 const RecipeList = (props) => {
@@ -16,7 +15,7 @@ const RecipeList = (props) => {
 
   useEffect(() => {
     axios
-    .get('http://172.19.202.190:3001/recipes/')
+    .get('http://10.1.1.128:3001/recipes/')
     .then(response => {
       console.log('Yeet recipes are fetched!')
       setRecipes(response.data)
@@ -49,6 +48,25 @@ const RecipeList = (props) => {
         recipeNotes,
         recipeRatings});
     }
+
+    const handleSearch = text => {
+      var recipeArray1 = getRecipesByRecipeName(text);
+      var recipeArray2 = getRecipesByCategoryName(text);
+      var recipeArray3 = getRecipesByIngredientName(text);
+      var aux = recipeArray1.concat(recipeArray2);
+      var recipeArray = [...new Set(aux)];
+      if (text == '') {
+        this.setState({
+          value: text,
+          data: []
+        });
+      } else {
+        this.setState({
+          value: text,
+          data: recipeArray
+        });
+      }
+    };
 
     return(
         <View>
@@ -87,7 +105,7 @@ const RecipeList = (props) => {
                     <View style={styles.container}>
                       <Image style={styles.photo} source={{ uri: item.photo_url }} />
                       <Text style={styles.title}>{item.title}</Text>
-                      <Text style={styles.category}>{getCategoryName(item.categoryId)}</Text>
+                      <Text style={styles.category}>{item.categoryId.name}</Text>
                     </View>
                   </TouchableHighlight>
                 )

@@ -1,16 +1,18 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect} from 'react';
 import axios from 'axios';
 import { 
     View, 
     Text, 
     TextInput, 
     ScrollView } from 'react-native';
+import RNPickerSelect, { defaultStyles } from 'react-native-picker-select';
 import { Icon, AirbnbRating } from 'react-native-elements';
 import styles from './styles';
-import { StackViewTransitionConfigs } from 'react-navigation-stack';
 
 const AddRecipe = (props) => {
     const [title, setTitle] = useState('');
+    const [categories, setCategories] = useState([]);
+    const [chosen, setChosen] = useState('');
     const [servingSize, setServingSize] = useState('');
     const [prepTime, setPrepTime] = useState('');
     const [cookTime, setCookTime] = useState('');
@@ -19,9 +21,31 @@ const AddRecipe = (props) => {
     const [notes, setNotes] = useState('');
     const [ratings, setRatings] = useState(0);
 
+    useEffect(() => {
+        axios
+        .get('http://10.1.1.128:3001/categories/')
+        .then(response => {
+          console.log('Yeet categories are fetched!')
+           response.data.map((res) => {
+               let object = { key: res.id, label : res.name, value: res.name}
+               categories.push(object);
+               console.log(object)
+           })
+           console.log(categories);
+        })
+      }, [])
+    
     const handleAddRecipe = () => {
+
+        const categoryId = categories.map((res) => {
+            if(res.label == chosen ){
+                return res.key;
+            }
+        })
+
         const recipeObject = {
             title: title,
+            categoryId: categoryId,
             servingSize: servingSize,
             prepTime: prepTime,
             cookTime: cookTime,
@@ -32,7 +56,7 @@ const AddRecipe = (props) => {
          }
 
          axios
-         .post('http://172.19.202.190:3001/recipes/add', recipeObject)
+         .post('http://10.1.1.128:3001/recipes/add', recipeObject)
          .then(res => {
            setTitle('');
            setServingSize('');
@@ -61,7 +85,16 @@ const AddRecipe = (props) => {
             onChangeText={text => setTitle(text)}
             placeholder="Title"
             />
-            <View style={styles.break}></View>
+            <Text style={{...styles.heading, marginLeft: 3, marginTop: 20}}> Category </Text>
+            <View style={{paddingLeft: 15, paddingTop: 10, paddingBottom: 10}}>
+            <RNPickerSelect
+            placeholder={{}}
+            items={categories}
+            onValueChange={(val) => setChosen(val)}
+            InputAccessoryView={() => null}
+            placeholder={{label: 'Set Category', value: null}}
+            />
+            </View>
              <TextInput 
             style={styles.inputText}
             onChangeText={text => setServingSize(text)}

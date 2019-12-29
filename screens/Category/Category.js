@@ -6,7 +6,6 @@ import {
   Image, 
   TouchableHighlight } from 'react-native';
 import axios from 'axios';
-import { getNumberOfRecipes } from '../../database/dataAPI';
 import styles from './styles';
 
 const CategoryScreen = (props) => {
@@ -15,7 +14,7 @@ const CategoryScreen = (props) => {
   // run after the first render
   useEffect(() => {
     axios
-    .get('http://172.19.202.190:3001/categories/')
+    .get('http://10.1.1.128:3001/categories/')
     .then(response => {
       console.log('Yeet categories are fetched!')
       setCategories(response.data)
@@ -37,7 +36,7 @@ const CategoryScreen = (props) => {
                  <View style={styles.categoriesItemContainer}>
                      <Text style={styles.categoriesName}>{item.name}</Text>
                      <Image style={styles.categoriesPhoto} source={{ uri: item.photo_url }} />
-                      <Text style={styles.categoriesInfo}>{getNumberOfRecipes(item.id)} Recipes</Text>
+                      <Text style={styles.categoriesInfo}>{item.recipes.length} Recipes</Text>
                     </View>
                   </TouchableHighlight>
               )
