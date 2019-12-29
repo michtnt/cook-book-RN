@@ -3,16 +3,22 @@ import axios from 'axios';
 import { 
     View, 
     Text, 
-    TextInput, 
+    TextInput,
+    Button, 
+    Image,
     ScrollView } from 'react-native';
 import RNPickerSelect, { defaultStyles } from 'react-native-picker-select';
 import { Icon, AirbnbRating } from 'react-native-elements';
+import * as ImagePicker from 'expo-image-picker';
+import Constants from 'expo-constants';
+import * as Permissions from 'expo-permissions';
 import styles from './styles';
 
 const AddRecipe = (props) => {
     const [title, setTitle] = useState('');
     const [categories, setCategories] = useState([]);
     const [chosen, setChosen] = useState('');
+    const [image, setImage] = useState(null);
     const [servingSize, setServingSize] = useState('');
     const [prepTime, setPrepTime] = useState('');
     const [cookTime, setCookTime] = useState('');
@@ -34,7 +40,37 @@ const AddRecipe = (props) => {
            console.log(categories);
         })
       }, [])
+
     
+      useEffect(() => {
+        getPermissionAsync();
+        console.log("Permission asked.")
+      }, [])
+
+      const getPermissionAsync = async () => {
+        if(Constants.platform.ios){
+            const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+            if(status !== 'granted'){
+                alert('Sorry. We need camera permissions.');
+            }
+        }
+    }
+
+    const handleImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4,3],
+            quality: 1
+        });
+
+        console.log(result);
+
+        if(!result.cancelled){
+            setImage(result.uri);
+        }
+    }
+
     const handleAddRecipe = () => {
 
         const categoryId = categories.map((res) => {
@@ -46,6 +82,7 @@ const AddRecipe = (props) => {
         const recipeObject = {
             title: title,
             categoryId: categoryId,
+            photo_url: image,
             servingSize: servingSize,
             prepTime: prepTime,
             cookTime: cookTime,
@@ -59,6 +96,9 @@ const AddRecipe = (props) => {
          .post('http://10.1.1.128:3001/recipes/add', recipeObject)
          .then(res => {
            setTitle('');
+           setCategories([]);
+           setChosen('');
+           setImage(null);
            setServingSize('');
            setPrepTime('');
            setCookTime('');
@@ -76,7 +116,11 @@ const AddRecipe = (props) => {
         <View style= {styles.main}>
          <ScrollView>
         <View style={styles.photo}>
-            <Text> Photo Upload </Text>
+        <Button 
+           title="Pick a picture from camera roll"
+           onPress={handleImage}
+           />
+           {image && <Image source={{uri: image}} style={{width: 300, height: 250}} />}
         </View>
          <View style={styles.input}>
             <Text style={styles.heading}>Overview</Text>

@@ -39,7 +39,8 @@
     "react-navigation-drawer": "^2.3.3",
     "react-navigation-header-buttons": "^3.0.4",
     "react-navigation-stack": "^1.10.3",
-    "yarn": "^1.21.1"
+    "yarn": "^1.21.1",
+    "expo-image-picker": "~8.0.1"
   },
   "proxy": "http://localhost:3001",
   "devDependencies": {
