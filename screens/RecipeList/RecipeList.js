@@ -12,6 +12,7 @@ import styles from './styles';
 
 const RecipeList = (props) => {
   const [recipes, setRecipes] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     axios
@@ -19,6 +20,15 @@ const RecipeList = (props) => {
     .then(response => {
       console.log('Yeet recipes are fetched!')
       setRecipes(response.data)
+    })
+  }, [])
+
+  useEffect(() => {
+    axios
+    .get('http://10.1.1.128:3001/categories/')
+    .then(response => {
+      console.log('Yeet categories are fetched!')
+      setCategories(response.data)
     })
   }, [])
 
@@ -50,22 +60,6 @@ const RecipeList = (props) => {
     }
 
     const handleSearch = text => {
-      var recipeArray1 = getRecipesByRecipeName(text);
-      var recipeArray2 = getRecipesByCategoryName(text);
-      var recipeArray3 = getRecipesByIngredientName(text);
-      var aux = recipeArray1.concat(recipeArray2);
-      var recipeArray = [...new Set(aux)];
-      if (text == '') {
-        this.setState({
-          value: text,
-          data: []
-        });
-      } else {
-        this.setState({
-          value: text,
-          data: recipeArray
-        });
-      }
     };
 
     return(
