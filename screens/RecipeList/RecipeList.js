@@ -20,6 +20,7 @@ const RecipeList = (props) => {
     .then(response => {
       console.log('Yeet recipes are fetched!')
       setRecipes(response.data)
+      console.log(response.data[1].categoryId)
     })
   }, [])
 
