@@ -40,11 +40,13 @@ recipeRouter.get('/:id/category', async (req, res, next) => {
     response.json(savedRecipe.toJSON())
     })
 
-  recipeRouter.get('/', (req, res, next) => {
-     Recipe.find({}).populate('categoryId', {name: 1})
-    .then((result) => {
-      res.json(result);
-    })
+  recipeRouter.get('/',  async (req, res, next) => {
+     const found = await Recipe.find({}).populate('categoryId', {name: 1})
+     if(found){
+       res.json(found);
+     } else {
+       res.status(404).end();
+     }
   })
 
   recipeRouter.put('/update/:id', (request, response, next) => {

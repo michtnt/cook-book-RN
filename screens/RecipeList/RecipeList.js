@@ -4,15 +4,17 @@ import {
    FlatList, 
    Text, 
    Image, 
+   ScrollView,
+   RefreshControl,
    TouchableHighlight } from 'react-native';
 import axios from 'axios';
-import { ScrollView } from 'react-native-gesture-handler';
 import { SearchBar } from 'react-native-elements';
 import styles from './styles';
 
 const RecipeList = (props) => {
   const [recipes, setRecipes] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     axios
@@ -20,7 +22,7 @@ const RecipeList = (props) => {
     .then(response => {
       console.log('Yeet recipes are fetched!')
       setRecipes(response.data)
-      console.log(response.data[1].categoryId)
+      console.log(response.data)
     })
   }, [])
 
@@ -32,6 +34,36 @@ const RecipeList = (props) => {
       setCategories(response.data)
     })
   }, [])
+
+
+  function wait(timeout) {
+    return new Promise(resolve => {
+      setTimeout(resolve, timeout);
+    });
+  }
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+
+    // for when it refreshes
+
+    axios
+    .get('http://10.1.1.128:3001/recipes/')
+    .then(response => {
+      console.log('Yeet recipes are fetched!')
+      setRecipes(response.data)
+      console.log(response.data)
+    })
+
+    axios
+    .get('http://10.1.1.128:3001/categories/')
+    .then(response => {
+      console.log('Yeet categories are fetched!')
+      setCategories(response.data)
+    })
+    
+    wait(2000).then(() => setRefreshing(false));
+  }, [refreshing]);
 
     const onPressRecipe = (item) => {
       const dataId = item.id
@@ -65,7 +97,11 @@ const RecipeList = (props) => {
 
     return(
         <View>
-          <ScrollView>
+          <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        >
             <SearchBar
           containerStyle={{
             backgroundColor: 'transparent',

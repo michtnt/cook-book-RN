@@ -8,7 +8,6 @@ import {
   RefreshControl,
   TouchableHighlight } from 'react-native';
 import axios from 'axios';
-import Constants from 'expo-constants';
 import styles from './styles';
 
 const CategoryScreen = (props) => {
