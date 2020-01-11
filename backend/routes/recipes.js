@@ -5,7 +5,6 @@ const Category = require('../models/categoryModel');
 recipeRouter.get('/:id/category', async (req, res, next) => {
   try{
   const recipe = await Recipe.findById(req.params.id).populate('categoryId', {name: 1})
-  console.log(recipe);
   if(recipe){
     res.json(recipe.name);
   } else{
@@ -21,7 +20,6 @@ recipeRouter.get('/:id/category', async (req, res, next) => {
 
     const category = await Category.findById(body.categoryId)
 
-    console.log(category.name)
     const recipe = new Recipe({
         title: body.title,
         categoryId: category._id,
@@ -49,11 +47,15 @@ recipeRouter.get('/:id/category', async (req, res, next) => {
      }
   })
 
-  recipeRouter.put('/update/:id', (request, response, next) => {
+  recipeRouter.put('/update/:id', async (request, response, next) => {
+
     const body = request.body
     
+    const newCategory = await Category.findById(body.categoryId);
+
     const recipe = ({
       title: body.title,
+      categoryId: newCategory._id,
       servingSize: body.servingSize,
       prepTime: body.prepTime,
       cookTime: body.cookTime,
@@ -63,11 +65,31 @@ recipeRouter.get('/:id/category', async (req, res, next) => {
       ratings: body.ratings,
   })
 
+    const findOldCategory = await Category.findById(body.oldCategory)
+    await findOldCategory.recipes.pull(body.recipeId);
+    await findOldCategory.save();
+
+    newCategory.recipes = await newCategory.recipes.concat(request.params.id);
+    await newCategory.save();
+
   Recipe.findByIdAndUpdate(request.params.id, recipe, { new: true })
   .then(updatedRecipe => {
     response.json(updatedRecipe.toJSON())
   })
   .catch(error => next(error))
+})
+
+recipeRouter.delete('/:id', async (request, response, next) => {
+  try{
+  await Recipe.findByIdAndRemove(request.params.id)
+  await Category.recipes.map((recipe) => {
+    if(recipe.id == request.params.id ){
+      console.log('Recipe are deleted');
+      recipe.findByIdAndRemove(request.params.id);
+      return response.status(204).end();
+    }
+  })
+  } catch(exception) { next(exception); }
 })
   
   module.exports = recipeRouter

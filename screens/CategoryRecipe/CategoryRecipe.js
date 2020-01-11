@@ -6,6 +6,7 @@ import {
    Text, 
    Image, 
    TouchableHighlight } from 'react-native';
+import PORT from '../../misc/port';
 import styles from './styles';
 
 const CategoryRecipe = (props) => {
@@ -13,15 +14,16 @@ const CategoryRecipe = (props) => {
 
   useEffect(() => {
     axios
-    .get(`http://10.1.1.128:3001/categories/${props.navigation.getParam('categoryId')}/recipes`)
+    .get(`http://${PORT}:3001/categories/${props.navigation.getParam('categoryId')}/recipes`)
     .then(response => {
       console.log('Yeet categories recipes are fetched!')
-      console.log(response.data);
       setRecipes(response.data)
     })
   }, [])
 
     const onPressRecipe = (item) => {
+      const category = item.name;
+      const categoryId = item.id;
       const recipeId = item.recipeId
       const recipePhoto = item.photo_url
       const recipeTitle = item.title
@@ -32,8 +34,9 @@ const CategoryRecipe = (props) => {
       const recipeDirections= item.directions
       const recipeNotes= item.notes
       const recipeRatings= item.ratings
-      console.log(recipeRatings)
       props.navigation.navigate('Recipe', {
+          category,
+          categoryId,
           recipeTitle, 
           recipeId,
           recipePhoto,

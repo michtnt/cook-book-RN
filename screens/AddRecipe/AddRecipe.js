@@ -12,6 +12,7 @@ import { Icon, AirbnbRating } from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
+import PORT from '../../misc/port';
 import styles from './styles';
 
 const AddRecipe = (props) => {
@@ -29,15 +30,13 @@ const AddRecipe = (props) => {
 
     useEffect(() => {
         axios
-        .get('http://10.1.1.128:3001/categories/')
+        .get(`http://${PORT}:3001/categories/`)
         .then(response => {
           console.log('Yeet categories are fetched!')
            response.data.map((res) => {
                let object = { key: res.id, label : res.name, value: res.name}
                categories.push(object);
-               console.log(object)
            })
-           console.log(categories);
         })
       }, [])
 
@@ -93,7 +92,7 @@ const AddRecipe = (props) => {
          }
 
          axios
-         .post('http://10.1.1.128:3001/recipes/add', recipeObject)
+         .post(`http://${PORT}:3001/recipes/add`, recipeObject)
          .then(res => {
            setTitle('');
            setCategories([]);

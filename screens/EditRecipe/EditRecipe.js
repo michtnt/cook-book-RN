@@ -7,10 +7,12 @@ import {
     ScrollView } from 'react-native';
 import RNPickerSelect, { defaultStyles } from 'react-native-picker-select';
 import { Icon, AirbnbRating } from 'react-native-elements';
+import PORT from '../../misc/port';
 import styles from './styles';
 
 const EditRecipe = (props) => {
     const [title, setTitle] = useState('');
+    const [oldCategory, setOldCategory] = useState('');
     const [categories, setCategories] = useState([]);
     const [chosen, setChosen] = useState('');
     const [servingSize, setServingSize] = useState('');
@@ -23,21 +25,19 @@ const EditRecipe = (props) => {
 
     useEffect(() => {
         axios
-        .get('http://10.1.1.128:3001/categories/')
+        .get(`http://${PORT}:3001/categories/`)
         .then(response => {
           console.log('Yeet categories are fetched!')
            response.data.map((res) => {
                let object = { key: res.id, label : res.name, value: res.name}
                categories.push(object);
-               console.log(object)
            })
-           console.log(categories);
         })
       }, [])
 
     const handleEditRecipe = () => {
 
-        const categoryId = categories.map((res) => {
+        const newCategory = categories.find((res) => {
             if(res.label == chosen ){
                 return res.key;
             }
@@ -45,7 +45,9 @@ const EditRecipe = (props) => {
 
         const recipeObject = {
             title: title,
-            categoryId: categoryId,
+            recipeId: props.navigation.getParam('dataId'),
+            oldCategory: props.navigation.getParam('categoryId'),
+            categoryId: newCategory.key,
             servingSize: servingSize,
             prepTime: prepTime,
             cookTime: cookTime,
@@ -56,7 +58,7 @@ const EditRecipe = (props) => {
          }
 
     axios
-    .put(`http://10.1.1.128:3001/recipes/update/${props.navigation.getParam('dataId')}`,recipeObject)
+    .put(`http://${PORT}:3001/recipes/update/${props.navigation.getParam('dataId')}`,recipeObject)
     .then(res => {
       console.log("Recipe updated!");
       props.navigation.navigate('Recipe');

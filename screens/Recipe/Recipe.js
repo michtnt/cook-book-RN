@@ -27,6 +27,8 @@ const Recipe = (props) => {
 
       const onPressRecipe = () => {
         const dataId = props.navigation.getParam('dataId')
+        const category = props.navigation.getParam('category')
+        const categoryId = props.navigation.getParam('categoryId')
         const recipeId = props.navigation.getParam('recipeId')
         const recipePhoto = props.navigation.getParam('recipePhoto')
         const recipeTitle = props.navigation.getParam('recipeTitle')
@@ -37,9 +39,11 @@ const Recipe = (props) => {
         const recipeDirections = props.navigation.getParam('recipeDirections')
         const recipeNotes = props.navigation.getParam('recipeNotes')
         const recipeRatings = props.navigation.getParam('recipeRatings')
-  
+        
         props.navigation.navigate('EditRecipe', {
           dataId,
+          category,
+          categoryId,
           recipeTitle, 
           recipeId,
           recipePhoto,

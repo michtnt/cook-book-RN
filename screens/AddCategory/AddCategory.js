@@ -9,6 +9,7 @@ import { Icon } from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
+import PORT from '../../misc/port';
 import styles from './styles';
 
 const AddCategory = (props) => {
@@ -50,7 +51,7 @@ const AddCategory = (props) => {
            photo_url: image
         }
         axios
-        .post('http://10.1.1.128:3001/categories/add', categoryObject)
+        .post(`http://${PORT}:3001/categories/add`, categoryObject)
         .then(res => {
           console.log("New Category successfully added!");
           setNewCategory('');

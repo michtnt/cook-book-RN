@@ -9,6 +9,7 @@ import {
    TouchableHighlight } from 'react-native';
 import axios from 'axios';
 import { SearchBar } from 'react-native-elements';
+import PORT from '../../misc/port';
 import styles from './styles';
 
 const RecipeList = (props) => {
@@ -18,17 +19,16 @@ const RecipeList = (props) => {
 
   useEffect(() => {
     axios
-    .get('http://10.1.1.128:3001/recipes/')
+    .get(`http://${PORT}:3001/recipes/`)
     .then(response => {
       console.log('Yeet recipes are fetched!')
       setRecipes(response.data)
-      console.log(response.data)
     })
   }, [])
 
   useEffect(() => {
     axios
-    .get('http://10.1.1.128:3001/categories/')
+    .get(`http://${PORT}:3001/categories/`)
     .then(response => {
       console.log('Yeet categories are fetched!')
       setCategories(response.data)
@@ -48,15 +48,14 @@ const RecipeList = (props) => {
     // for when it refreshes
 
     axios
-    .get('http://10.1.1.128:3001/recipes/')
+    .get(`http://${PORT}:3001/recipes/`)
     .then(response => {
       console.log('Yeet recipes are fetched!')
       setRecipes(response.data)
-      console.log(response.data)
     })
 
     axios
-    .get('http://10.1.1.128:3001/categories/')
+    .get(`http://${PORT}:3001/categories/`)
     .then(response => {
       console.log('Yeet categories are fetched!')
       setCategories(response.data)
@@ -67,6 +66,8 @@ const RecipeList = (props) => {
 
     const onPressRecipe = (item) => {
       const dataId = item.id
+      const category = item.categoryId.name;
+      const categoryId = item.categoryId.id;
       const recipeId = item.recipeId
       const recipePhoto = item.photo_url
       const recipeTitle = item.title
@@ -80,6 +81,8 @@ const RecipeList = (props) => {
 
       props.navigation.navigate('Recipe', {
         dataId,
+        category,
+        categoryId,
         recipeTitle, 
         recipeId,
         recipePhoto,

@@ -8,6 +8,7 @@ import {
   RefreshControl,
   TouchableHighlight } from 'react-native';
 import axios from 'axios';
+import PORT from '../../misc/port';
 import styles from './styles';
 
 const CategoryScreen = (props) => {
@@ -18,7 +19,7 @@ const CategoryScreen = (props) => {
   // run after the first render
   useEffect(() => {
     axios
-    .get('http://10.1.1.128:3001/categories/')
+    .get(`http://${PORT}:3001/categories/`)
     .then(response => {
       console.log('Yeet categories are fetched!')
       setCategories(response.data)
@@ -37,7 +38,7 @@ const CategoryScreen = (props) => {
     // for when it refreshes
 
     axios
-    .get('http://10.1.1.128:3001/categories/')
+    .get(`http://${PORT}:3001/categories/`)
     .then(response => {
       console.log('Yeet categories are fetched!')
       setCategories(response.data)
