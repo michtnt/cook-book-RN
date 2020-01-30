@@ -13,9 +13,9 @@ This is a project I made after watching a 4 hours react-native crash course. I c
 6. Scan the barcode with your phone camera.
 
 # Screenshots
-![port](/images/IMG_6275.png)
-![port](/images/IMG_6276.png)
-![port](/images/IMG_6277.png)
-![port](/images/IMG_6278.png)
-![port](/images/IMG_6279.png)
-![port](/images/IMG_6280.png)
+![IMG1](/images/IMG_6275.png)
+![IMG2](/images/IMG_6276.png)
+![IMG3](/images/IMG_6277.png)
+![IMG4](/images/IMG_6278.png)
+![IMG5](/images/IMG_6279.png)
+![IMG6](/images/IMG_6280.png)
