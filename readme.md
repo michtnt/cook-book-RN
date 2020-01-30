@@ -14,8 +14,8 @@ This is a project I made after watching a 4 hours react-native crash course. I c
 
 # Screenshots
 ![IMG1](/images/img1.png)
-<!-- ![IMG2](/images/img2.png)
-![IMG3](/images/img3.png)
+![IMG2](/images/img2.png)
+<!-- ![IMG3](/images/img3.png)
 ![IMG4](/images/img4.png)
 ![IMG5](/images/img5.png)
 ![IMG6](/images/img6.png) -->
