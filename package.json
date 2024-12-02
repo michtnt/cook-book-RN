@@ -20,7 +20,7 @@
     "express-validator": "^6.6.1",
     "json-server": "^0.15.1",
     "lodash.chunk": "^4.2.0",
-    "mongoose": "^5.10.6",
+    "mongoose": "^8.8.3",
     "nodemon": "^2.0.4",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
